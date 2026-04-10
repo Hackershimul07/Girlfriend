@@ -1,0 +1,5 @@
+{
+  "name": "Zoya AI Assistant",
+  "description": "A young, confident, witty, and sassy female voice-to-voice AI assistant with a flirty and playful personality.",
+  "requestFramePermissions": ["microphone"]
+}
