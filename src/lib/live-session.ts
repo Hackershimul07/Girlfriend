@@ -109,6 +109,11 @@ export class LiveSession {
           }]
         }
       });
+
+      // Let Zoya speak first
+      this.session.sendRealtimeInput({ 
+        text: "Say hello to the user in your sassy Bengali personality!" 
+      });
     } catch (error) {
       callbacks.onError(error);
       this.updateState("disconnected", callbacks);
