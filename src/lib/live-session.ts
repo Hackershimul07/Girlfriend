@@ -32,6 +32,10 @@ export class LiveSession {
         callbacks: {
           onopen: () => {
             this.updateState("connected", callbacks);
+            // Let Zoya speak first
+            this.session.sendRealtimeInput({ 
+              text: "Say hello to the user in your sassy Bengali personality!" 
+            });
           },
           onmessage: async (message: LiveServerMessage) => {
             // Handle audio output
@@ -70,10 +74,12 @@ export class LiveSession {
             }
           },
           onerror: (error) => {
+            console.error("Gemini Live Error:", error);
             callbacks.onError(error);
             this.updateState("disconnected", callbacks);
           },
           onclose: () => {
+            console.log("Gemini connection closed.");
             this.updateState("disconnected", callbacks);
           }
         },
@@ -109,12 +115,8 @@ export class LiveSession {
           }]
         }
       });
-
-      // Let Zoya speak first
-      this.session.sendRealtimeInput({ 
-        text: "Say hello to the user in your sassy Bengali personality!" 
-      });
     } catch (error) {
+      console.error("Connection attempt failed:", error);
       callbacks.onError(error);
       this.updateState("disconnected", callbacks);
     }
