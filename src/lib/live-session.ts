@@ -27,15 +27,11 @@ export class LiveSession {
     this.updateState("connecting", callbacks);
 
     try {
-      this.session = await this.ai.live.connect({
+      const sessionPromise = this.ai.live.connect({
         model: "gemini-3.1-flash-live-preview",
         callbacks: {
           onopen: () => {
             this.updateState("connected", callbacks);
-            // Let Zoya speak first
-            this.session.sendRealtimeInput({ 
-              text: "Say hello to the user in your sassy Bengali personality!" 
-            });
           },
           onmessage: async (message: LiveServerMessage) => {
             // Handle audio output
@@ -115,6 +111,14 @@ export class LiveSession {
           }]
         }
       });
+
+      this.session = await sessionPromise;
+
+      // Start the conversation
+      this.session.sendRealtimeInput({ 
+        text: "Say a very sassy and flirty hello in Bengali to the user right now to start the conversation! Be your witty Zoya self." 
+      });
+
     } catch (error) {
       console.error("Connection attempt failed:", error);
       callbacks.onError(error);
