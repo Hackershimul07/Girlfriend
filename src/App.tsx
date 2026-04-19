@@ -44,16 +44,18 @@ export default function App() {
         },
         onError: (err) => {
           console.error("Live Session Error:", err);
-          setError("Connection failed. Zoya is having some trouble right now.");
+          const msg = err?.message || JSON.stringify(err);
+          setError(`Zoya connection error: ${msg}. Check API Key or VPN.`);
         }
       });
 
       await audioStreamerRef.current.startRecording((base64) => {
         liveSessionRef.current?.sendAudio(base64);
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error("Start Session Error:", err);
-      setError("Could not access microphone or connect to Zoya.");
+      const msg = err?.message || JSON.stringify(err);
+      setError(`Mic or Startup error: ${msg}`);
       setState("disconnected");
     }
   };
